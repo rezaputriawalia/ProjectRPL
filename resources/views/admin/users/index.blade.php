@@ -6,8 +6,7 @@
     active="users"
     :nav-items="$navItems"
     :userName="auth()->user()->name"
-    userRole="Administrator"
->
+    userRole="Administrator">
 
 <div class="admin-dashboard">
 
@@ -24,7 +23,7 @@
         </div>
 
         <a href="{{ route('admin.users.create') }}"
-            class="sigap-button sigap-button--primary sigap-button--md">
+           class="sigap-button sigap-button--primary sigap-button--md">
 
             <i class="fa-solid fa-plus"></i>
 
@@ -56,11 +55,7 @@
 
                             <th>Status</th>
 
-                            <th width="170">
-
-                                Aksi
-
-                            </th>
+                            <th width="170">Aksi</th>
 
                         </tr>
 
@@ -72,11 +67,7 @@
 
                         <tr>
 
-                            <td>
-
-                                {{ $loop->iteration }}
-
-                            </td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <td>
 
@@ -84,17 +75,9 @@
 
                             </td>
 
-                            <td>
+                            <td>{{ $user->email }}</td>
 
-                                {{ $user->email }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $user->role->display_name }}
-
-                            </td>
+                            <td>{{ $user->role->display_name }}</td>
 
                             <td>
 
@@ -122,26 +105,22 @@
 
                                 <div class="d-flex gap-2">
 
-                                    <a
-                                        href="{{ route('admin.users.edit',$user) }}"
-                                        class="sigap-button sigap-button--secondary sigap-button--sm">
+                                    <a href="{{ route('admin.users.edit',$user) }}"
+                                       class="sigap-button sigap-button--secondary sigap-button--sm">
 
                                         Edit
 
                                     </a>
 
-                                    <form
-                                        action="{{ route('admin.users.destroy',$user) }}"
-                                        method="POST"
-                                        class="delete-form">
+                                    <form action="{{ route('admin.users.destroy',$user) }}"
+                                          method="POST"
+                                          class="delete-form">
 
                                         @csrf
-
                                         @method('DELETE')
 
-                                        <button
-                                            type="submit"
-                                            class="sigap-button sigap-button--brown sigap-button--sm">
+                                        <button type="submit"
+                                                class="sigap-button sigap-button--brown sigap-button--sm">
 
                                             Hapus
 
@@ -159,7 +138,8 @@
 
                         <tr>
 
-                            <td colspan="6" style="text-align:center;padding:40px">
+                            <td colspan="6"
+                                class="text-center py-5">
 
                                 Tidak ada data user.
 
@@ -181,69 +161,81 @@
 
 </div>
 
-@if(session('success'))
-
 <script>
 
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function () {
 
-Swal.fire({
+    @if(session('success'))
 
-icon:'success',
+    Swal.fire({
 
-title:'Berhasil',
+        icon: 'success',
 
-text:"{{ session('success') }}",
+        title: 'Berhasil',
 
-timer:1800,
+        text: "{{ session('success') }}",
 
-showConfirmButton:false
+        timer: 1800,
 
-});
+        showConfirmButton: false
 
-});
+    });
 
-</script>
+    @endif
 
-@endif
+    @if(session('error'))
 
-<script>
+    Swal.fire({
 
-document.querySelectorAll('.delete-form').forEach(form=>{
+        icon: 'error',
 
-form.addEventListener('submit',function(e){
+        title: 'Tidak Dapat Menghapus',
 
-e.preventDefault();
+        text: "{{ session('error') }}",
 
-Swal.fire({
+        confirmButtonColor: '#4A835F'
 
-title:'Hapus User?',
+    });
 
-text:'Data yang dihapus tidak dapat dikembalikan.',
+    @endif
 
-icon:'warning',
+    document.querySelectorAll('.delete-form').forEach(function(form){
 
-showCancelButton:true,
+        form.addEventListener('submit', function(e){
 
-confirmButtonColor:'#4A835F',
+            e.preventDefault();
 
-cancelButtonColor:'#C7352E',
+            Swal.fire({
 
-confirmButtonText:'Ya, Hapus',
+                title: 'Hapus User?',
 
-cancelButtonText:'Batal'
+                text: 'Data yang dihapus tidak dapat dikembalikan.',
 
-}).then(result=>{
+                icon: 'warning',
 
-if(result.isConfirmed){
+                showCancelButton: true,
 
-form.submit();
+                confirmButtonColor: '#4A835F',
 
-}
+                cancelButtonColor: '#C7352E',
 
-});
+                confirmButtonText: 'Ya, Hapus',
 
-});
+                cancelButtonText: 'Batal'
+
+            }).then((result)=>{
+
+                if(result.isConfirmed){
+
+                    form.submit();
+
+                }
+
+            });
+
+        });
+
+    });
 
 });
 

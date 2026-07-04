@@ -9,6 +9,7 @@ use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Illuminate\Database\QueryException;
 
 class UserController extends Controller
 {
@@ -139,11 +140,22 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
 
-        return redirect()
-            ->route('admin.users.index')
-            ->with('success', 'User berhasil dihapus.');
+            $user->delete();
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User berhasil dihapus.');
+        } catch (QueryException $e) {
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with(
+                    'error',
+                    'User tidak dapat dihapus karena masih memiliki data monitoring.'
+                );
+        }
     }
 
     private function adminNavigation(): array

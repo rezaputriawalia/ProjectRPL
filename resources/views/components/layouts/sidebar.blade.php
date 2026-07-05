@@ -1,4 +1,4 @@
-@props([
+d@props([
     'role' => 'perawat',
     'brand' => null,
     'subtitle' => 'Rumah Sakit Jiwa',
@@ -12,7 +12,8 @@
     $brandText = $brand ?? 'SIGAP ' . str($role)->title();
 @endphp
 
-<aside class="sigap-sidebar">
+<div class="sigap-sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sigap-sidebar" id="sidebar">
     <div>
         <a href="{{ url('/') }}" class="sigap-brand" aria-label="SIGAP">
             <span class="sigap-brand__title">{{ $brandText }}</span>
@@ -24,7 +25,7 @@
                 @php
                     $key = $item['key'] ?? ($item['label'] ?? '');
                     $isActive = $active === $key || ($item['active'] ?? false);
-                    $href = $item['route'] ?? $item['href'] ?? '#';
+                    $href = $item['route'] ?? ($item['href'] ?? '#');
                     $icon = $item['icon'] ?? null;
                 @endphp
 
@@ -62,4 +63,48 @@
 
     </div>
     {{-- @endif --}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("sidebarOverlay");
+            const toggle = document.getElementById("sidebarToggle");
+
+            if (toggle) {
+
+                toggle.addEventListener("click", () => {
+
+                    sidebar.classList.toggle("show");
+                    overlay.classList.toggle("show");
+
+                });
+
+            }
+
+            overlay.addEventListener("click", () => {
+
+                sidebar.classList.remove("show");
+                overlay.classList.remove("show");
+
+            });
+
+            document.querySelectorAll(".sigap-nav-item").forEach(item => {
+
+                item.addEventListener("click", () => {
+
+                    if (window.innerWidth < 992) {
+
+                        sidebar.classList.remove("show");
+                        overlay.classList.remove("show");
+
+                    }
+
+                });
+
+            });
+
+        });
+    </script>
 </aside>
+</div?

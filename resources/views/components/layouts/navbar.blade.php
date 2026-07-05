@@ -9,24 +9,14 @@
 
 <header class="sigap-navbar">
     <div class="sigap-navbar__left">
-
-        <button type="button" class="sigap-mobile-toggle" id="sidebarToggle">
-
-            <i class="fa-solid fa-bars"></i>
-
-        </button>
-
         @if ($showSearch)
             <form action="#" method="GET" class="sigap-search" role="search">
-                <span class="sigap-search__icon"></span>
+                <span class="sigap-search__icon" aria-hidden="true"></span>
                 <input type="search" name="q" placeholder="{{ $searchPlaceholder }}" autocomplete="off">
             </form>
         @else
-            <span class="sigap-navbar__title">
-                {{ $title }}
-            </span>
+            <span class="sigap-navbar__title">{{ $title }}</span>
         @endif
-
     </div>
 
     <div class="sigap-navbar__right">
@@ -43,8 +33,7 @@
             @if ($avatar)
                 <img src="{{ $avatar }}" alt="{{ $userName }}" class="sigap-user__avatar">
             @else
-                <span class="sigap-user__avatar sigap-user__avatar--empty"
-                    aria-hidden="true">{{ str($userName)->substr(0, 1)->upper() }}</span>
+                <span class="sigap-user__avatar sigap-user__avatar--empty" aria-hidden="true">{{ str($userName)->substr(0, 1)->upper() }}</span>
             @endif
         </div>
     </div>

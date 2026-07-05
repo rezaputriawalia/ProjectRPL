@@ -183,6 +183,20 @@ showConfirmButton:false
 
 @endif
 
+@if(session('error'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    Swal.fire({
+        icon: 'error',
+        title: 'Tidak dapat dihapus',
+        text: "{{ session('error') }}"
+    });
+
+});
+</script>
+@endif
+
 <script>
 
 document.querySelectorAll('.delete-form').forEach(form=>{

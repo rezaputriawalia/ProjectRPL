@@ -78,6 +78,16 @@ class WardController extends Controller
 
     public function destroy(Ward $ward)
     {
+        if ($ward->rooms()->exists()) {
+
+            return redirect()
+                ->route('admin.wards.index')
+                ->with(
+                    'error',
+                    'Bangsal tidak dapat dihapus karena masih memiliki ruangan. Hapus atau pindahkan semua ruangan terlebih dahulu.'
+                );
+        }
+
         $ward->delete();
 
         return redirect()

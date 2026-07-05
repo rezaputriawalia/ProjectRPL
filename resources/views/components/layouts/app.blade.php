@@ -14,6 +14,7 @@
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,12 +27,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
+
 <body class="sigap-body">
     <div class="sigap-shell">
         <x-layouts.sidebar :role="$role" :brand="$brand" :subtitle="$subtitle" :items="$navItems" :active="$active" />
 
         <div class="sigap-main">
-            <x-layouts.navbar :title="$title" :user-name="$userName" :user-role="$userRole ?? $role" :search-placeholder="$searchPlaceholder" :show-search="$showSearch" />
+            <x-layouts.navbar :title="$title" :user-name="$userName" :user-role="$userRole ?? $role" :search-placeholder="$searchPlaceholder"
+                :show-search="$showSearch" />
 
             <main class="sigap-content">
                 {{ $slot }}
@@ -45,5 +48,31 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: @json(session('success')),
+                    timer: 1800,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: @json(session('error'))
+                });
+            });
+        </script>
+    @endif
 </body>
+
 </html>

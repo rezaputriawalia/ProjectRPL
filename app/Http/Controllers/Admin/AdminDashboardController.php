@@ -154,7 +154,6 @@ class AdminDashboardController extends Controller
     {
         if (
             !Schema::hasTable('wards') ||
-            !Schema::hasTable('rooms') ||
             !Schema::hasTable('registrations')
         ) {
             return collect();
@@ -167,17 +166,18 @@ class AdminDashboardController extends Controller
                     ->where('registrations.status', '=', 'active');
             })
             ->select(
+                'wards.id',
                 'wards.name',
-                DB::raw('SUM(DISTINCT rooms.capacity) as capacity'),
-                DB::raw('COUNT(DISTINCT registrations.id) as occupied')
+                'wards.capacity',
+                DB::raw('COUNT(DISTINCT registrations.patient_id) as occupied')
             )
-            ->groupBy('wards.id', 'wards.name')
+            ->groupBy('wards.id', 'wards.name', 'wards.capacity')
             ->orderBy('wards.name')
             ->get()
             ->map(fn($row) => $this->formatWardCapacity(
                 $row->name,
                 (int) $row->occupied,
-                max((int) $row->capacity, 1)
+                (int) $row->capacity
             ));
     }
 

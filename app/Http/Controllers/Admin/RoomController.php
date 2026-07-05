@@ -46,6 +46,22 @@ class RoomController extends Controller
 
         ]);
 
+        $ward = Ward::findOrFail($validated['ward_id']);
+
+        $totalCapacity = Room::where('ward_id', $validated['ward_id'])
+            ->sum('capacity');
+
+        if (($totalCapacity + $validated['capacity']) > $ward->capacity) {
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Total kapasitas seluruh ruangan melebihi kapasitas bangsal (' . $ward->capacity . ' tempat tidur).'
+                );
+        }
+
         Room::create($validated);
 
         return redirect()
@@ -77,6 +93,23 @@ class RoomController extends Controller
             'status' => 'required|in:available,full,maintenance',
 
         ]);
+
+        $ward = Ward::findOrFail($validated['ward_id']);
+
+        $totalCapacity = Room::where('ward_id', $validated['ward_id'])
+            ->where('id', '!=', $room->id)
+            ->sum('capacity');
+
+        if (($totalCapacity + $validated['capacity']) > $ward->capacity) {
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Total kapasitas seluruh ruangan melebihi kapasitas bangsal (' . $ward->capacity . ' tempat tidur).'
+                );
+        }
 
         $room->update($validated);
 
